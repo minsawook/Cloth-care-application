@@ -1,4 +1,5 @@
 import 'package:category_picker/category_picker_item.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:category_picker/category_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -16,7 +17,9 @@ class _ClothState extends State<Cloth> {
   Future<List<FirebaseFile>> futureFiles;
   void initState() {
     super.initState();
-    futureFiles = FirebaseApi.listAll('${n.toString()}/');
+    futureFiles = FirebaseApi.listAll(
+        FirebaseAuth.instance.currentUser.email.toString() +
+            '/${n.toString()}/');
   }
 
   @override
@@ -62,7 +65,9 @@ class _ClothState extends State<Cloth> {
                     break;
                 }
                 setState(() {});
-                futureFiles = FirebaseApi.listAll('${n.toString()}/');
+                futureFiles = FirebaseApi.listAll(
+                    FirebaseAuth.instance.currentUser.email.toString() +
+                        '/${n.toString()}/');
               },
             ),
             Container(
@@ -136,12 +141,17 @@ class _ClothState extends State<Cloth> {
                         try {
                           await FirebaseStorage.instance
                               .ref()
-                              .child('/${n.toString()}/' + '${file.name}')
+                              .child(FirebaseAuth.instance.currentUser.email
+                                      .toString() +
+                                  '/${n.toString()}/' +
+                                  '${file.name}')
                               .delete();
                           Navigator.of(context).pop();
                           setState(() {
-                            futureFiles =
-                                FirebaseApi.listAll('${n.toString()}/');
+                            futureFiles = FirebaseApi.listAll(FirebaseAuth
+                                    .instance.currentUser.email
+                                    .toString() +
+                                '/${n.toString()}/');
                           });
                         } catch (e) {
                           debugPrint('Error : $e');

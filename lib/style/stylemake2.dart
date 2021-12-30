@@ -1,5 +1,5 @@
 import 'package:cloth/main.dart';
-import 'package:cloth/style/data.dart';
+import 'package:cloth/data/data.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

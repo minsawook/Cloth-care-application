@@ -1,7 +1,7 @@
 import 'package:cloth/fb/fb_api.dart';
 import 'package:cloth/fb/fb_file.dart';
-import 'package:cloth/style/data.dart';
 import 'package:cloth/style/stylemake.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +21,8 @@ class _ClosetPageState extends State<ClosetPage> {
 
   void initState() {
     super.initState();
-    futureFiles = FirebaseApi.listAll('cody/');
+    futureFiles = FirebaseApi.listAll(
+        FirebaseAuth.instance.currentUser.email.toString() + '/cody/');
   }
 
   var listText = [
@@ -150,9 +151,6 @@ class _ClosetPageState extends State<ClosetPage> {
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            /* buildHeader(files.length), //위에 파일 갯수 표시
-                      const SizedBox(height: 12),*/
-
                             Expanded(
                               child: GridView.builder(
                                 itemCount: files.length,

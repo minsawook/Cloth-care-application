@@ -1,10 +1,14 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:math';
 import 'package:cloth/camera/camera.dart';
+import 'package:cloth/fb/fb_api.dart';
+import 'package:cloth/fb/fb_file.dart';
 import 'package:cloth/style/stylelist.dart';
 import 'package:cloth/style/stylemake.dart';
 import 'package:cloth/clotharray/cloths.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:fab_circular_menu/fab_circular_menu.dart';
 import 'package:http/http.dart';
@@ -20,6 +24,10 @@ class FramePage extends StatefulWidget {
 }
 
 class _FramePageState extends State<FramePage> {
+  FirebaseStorage storage = FirebaseStorage.instance;
+  Future<List<FirebaseFile>> futureFiles;
+  int random;
+  int count;
   var weatherData;
   final _openweatherkey = '2db2f66ff4c3c59a8ede85ea41cecfb6';
   @override
@@ -27,6 +35,8 @@ class _FramePageState extends State<FramePage> {
     // TODO: implement initState
     super.initState();
     getPosition();
+    futureFiles = FirebaseApi.listAll(
+        FirebaseAuth.instance.currentUser.email.toString() + '/cody/');
   }
 
   void getPosition() async {
@@ -55,7 +65,6 @@ class _FramePageState extends State<FramePage> {
 
       // string to json
       //print('data22 = $data');
-      log('$dataJson');
       print('온도는 ${weatherData['main']['temp']}');
       print('는 ${weatherData['sys']['country']}');
       setState(() {
@@ -69,15 +78,7 @@ class _FramePageState extends State<FramePage> {
 
   double test = 0.0;
   var weather = '01d';
-  /*int _selectedIndex = 1;
 
-  List<Widget> _bodyScreen = [
-    MenuPage(),
-    HomePage(),
-    ClosetPage(),
-    ProfilePage()
-  ];
-*/
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -126,48 +127,38 @@ class _FramePageState extends State<FramePage> {
             height: 10,
           ),
           Container(
+            height: MediaQuery.of(context).size.height * 0.4,
+            width: MediaQuery.of(context).size.width * 0.4,
             child: SizedBox(
-              height: 200,
-              width: 200,
-              child: Image.asset('assets/images/main_cloth.png'),
-            ),
+                child: FutureBuilder<List<FirebaseFile>>(
+              future: futureFiles,
+              builder: (context, snapshot) {
+                switch (snapshot.connectionState) {
+                  case ConnectionState.waiting:
+                    return Center(child: CircularProgressIndicator());
+                  default:
+                    if (snapshot.hasError) {
+                      return Center(child: Text('Some error occurred!'));
+                    } else {
+                      final files = snapshot.data;
+                      random = Random().nextInt(files.length);
+                      count = files.length;
+                      final file = files[random];
+                      return Image.network(file.url);
+                    }
+                }
+              },
+            )),
           ),
+          GestureDetector(
+              onTap: () {
+                setState(() {
+                  random = Random().nextInt(count);
+                });
+              },
+              child: Icon(Icons.refresh_outlined))
         ],
       ),
-      /*_bodyScreen[_selectedIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        backgroundColor: Colors.blue,
-        selectedItemColor: Colors.white,
-        unselectedItemColor: Colors.white.withOpacity(.60),
-        selectedFontSize: 14,
-        unselectedFontSize: 12,
-        currentIndex: _selectedIndex, //현재 선택된 Index
-        onTap: (int index) {
-          setState(() {
-            _selectedIndex = index;
-          });
-        },
-        items: [
-          BottomNavigationBarItem(
-            label: '메뉴',
-            icon: Icon(Icons.favorite),
-          ),
-          BottomNavigationBarItem(
-            label: '홈',
-            icon: Icon(Icons.music_note),
-          ),
-          BottomNavigationBarItem(
-            label: '옷장',
-            icon: Icon(Icons.location_on),
-          ),
-          BottomNavigationBarItem(
-            label: '내정보',
-            icon: Icon(Icons.library_books),
-          ),
-        ],
-      ),
-      */
       floatingActionButton: FabCircularMenu(
           ringDiameter: 300.0,
           ringWidth: 50.0,

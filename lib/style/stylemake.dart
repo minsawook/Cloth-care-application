@@ -1,12 +1,14 @@
 import 'dart:typed_data';
 import 'package:cloth/clotharray/cloths_select.dart';
-import 'package:cloth/style/data.dart';
+import 'package:cloth/data/data.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:toast/toast.dart';
+import 'package:uuid/uuid.dart';
 
 class HomeView extends StatefulWidget {
   @override
@@ -14,7 +16,12 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-  //Create an instance of ScreenshotController
+  var name;
+  void initState() {
+    super.initState();
+    name = Uuid().v4();
+  }
+
   ScreenshotController screenshotController = ScreenshotController();
 
   List<Widget> movableItems = [];
@@ -170,14 +177,20 @@ class _HomeViewState extends State<HomeView> {
                                           .capture(
                                               delay: Duration(milliseconds: 10))
                                           .then((capturedImage) async {
-                                        firestore.collection('cody').doc().set({
+                                        firestore
+                                            .collection(FirebaseAuth
+                                                    .instance.currentUser.email
+                                                    .toString() +
+                                                '_cody')
+                                            .doc()
+                                            .set({
                                           "계절": seasonListValue[
                                               seasonSelectedValue],
                                           "스타일": listValue[selectedValue],
-                                          "룩": '${DateTime.now()}.png',
+                                          "룩": '$name.png',
                                         });
                                         showCapturedWidget(
-                                            context, capturedImage);
+                                            context, capturedImage, name);
 
                                         Toast.show("저장되었습니다.", context,
                                             duration: Toast.LENGTH_SHORT,
@@ -212,10 +225,11 @@ class _HomeViewState extends State<HomeView> {
   }
 
   Future<dynamic> showCapturedWidget(
-      BuildContext context, Uint8List capturedImage) {
+      BuildContext context, Uint8List capturedImage, var name) {
     return FirebaseStorage.instance
-        .ref('cody' +
-            '/${DateTime.now()}' + // /붙여야 폴더
+        .ref(FirebaseAuth.instance.currentUser.email.toString() +
+            '/cody' +
+            '/$name' + // /붙여야 폴더
             '.png')
         .putData(capturedImage);
   }

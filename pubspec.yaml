@@ -46,6 +46,7 @@ dependencies:
   screenshot: ^1.2.3
   shared_preferences: ^0.5.3+4
   firebase_auth: ^3.3.4
+  uuid: ^3.0.5
 dev_dependencies:
   flutter_test:
     sdk: flutter

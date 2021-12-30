@@ -1,4 +1,5 @@
 import 'package:cloth/main.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
@@ -7,6 +8,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:toast/toast.dart';
+import 'package:uuid/uuid.dart';
 
 class Camera extends StatefulWidget {
   @override
@@ -16,12 +18,8 @@ class Camera extends StatefulWidget {
 class _CameraState extends State<Camera> {
   File _image;
   final picker = ImagePicker();
-  SettableMetadata metadata = SettableMetadata(
-    cacheControl: 'max-age=60',
-    customMetadata: <String, String>{
-      '계절': '여름',
-    },
-  );
+  var uuid = Uuid();
+
   get pickedFile => null;
   Future getImage(ImageSource source) async {
     final pickedFile =
@@ -214,8 +212,10 @@ class _CameraState extends State<Camera> {
                   try {
                     if (_image != null) {
                       FirebaseStorage.instance
-                          .ref(listValue[selectedValue] +
-                              '/${DateTime.now()}' + // /붙여야 폴더
+                          .ref(FirebaseAuth.instance.currentUser.email
+                                  .toString() +
+                              '/${listValue[selectedValue]}' +
+                              '/${uuid.v4()}' + // /붙여야 폴더
                               //rnd.toString() +
                               '.png')
                           .putFile(_image);

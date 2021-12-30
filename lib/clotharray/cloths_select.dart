@@ -1,6 +1,7 @@
 import 'package:category_picker/category_picker_item.dart';
-import 'package:cloth/style/data.dart';
+import 'package:cloth/data/data.dart';
 import 'package:cloth/style/stylemake2.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:category_picker/category_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -21,7 +22,9 @@ class _Cloth_selectState extends State<Cloth_select> {
   Future<List<FirebaseFile>> futureFiles;
   void initState() {
     super.initState();
-    futureFiles = FirebaseApi.listAll('${n.toString()}/');
+    futureFiles = FirebaseApi.listAll(
+        FirebaseAuth.instance.currentUser.email.toString() +
+            '/${n.toString()}/');
   }
 
   @override
@@ -67,7 +70,9 @@ class _Cloth_selectState extends State<Cloth_select> {
                     break;
                 }
                 setState(() {});
-                futureFiles = FirebaseApi.listAll('${n.toString()}/');
+                futureFiles = FirebaseApi.listAll(
+                    FirebaseAuth.instance.currentUser.email.toString() +
+                        '/${n.toString()}/');
               },
             ),
             Container(
