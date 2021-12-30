@@ -4,6 +4,7 @@ import 'package:cloth/camera/camera.dart';
 import 'package:cloth/style/stylelist.dart';
 import 'package:cloth/style/stylemake.dart';
 import 'package:cloth/clotharray/cloths.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fab_circular_menu/fab_circular_menu.dart';
 import 'package:http/http.dart';
@@ -207,7 +208,7 @@ class _FramePageState extends State<FramePage> {
               height: 100,
               child: DrawerHeader(
                 child: Text(
-                  '메뉴',
+                  '사용자',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
@@ -220,6 +221,11 @@ class _FramePageState extends State<FramePage> {
                 ),
               ),
             ),
+            ListTile(
+                title: Text('로그아웃'),
+                onTap: () {
+                  FirebaseAuth.instance.signOut();
+                }),
             Container(
               color: Colors.lightBlue[500],
               height: 50.0,
