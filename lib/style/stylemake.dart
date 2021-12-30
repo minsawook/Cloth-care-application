@@ -187,7 +187,7 @@ class _HomeViewState extends State<HomeView> {
                                           "계절": seasonListValue[
                                               seasonSelectedValue],
                                           "스타일": listValue[selectedValue],
-                                          "룩": '$name.png',
+                                          "룩": '$name.jpg',
                                         });
                                         showCapturedWidget(
                                             context, capturedImage, name);
@@ -230,7 +230,7 @@ class _HomeViewState extends State<HomeView> {
         .ref(FirebaseAuth.instance.currentUser.email.toString() +
             '/cody' +
             '/$name' + // /붙여야 폴더
-            '.png')
+            '.jpg')
         .putData(capturedImage);
   }
 }

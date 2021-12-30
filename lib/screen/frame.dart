@@ -26,6 +26,7 @@ class FramePage extends StatefulWidget {
 class _FramePageState extends State<FramePage> {
   FirebaseStorage storage = FirebaseStorage.instance;
   Future<List<FirebaseFile>> futureFiles;
+  FirebaseFile file;
   int random;
   int count;
   var weatherData;
@@ -127,33 +128,31 @@ class _FramePageState extends State<FramePage> {
             height: 10,
           ),
           Container(
-            height: MediaQuery.of(context).size.height * 0.4,
-            width: MediaQuery.of(context).size.width * 0.4,
-            child: SizedBox(
-                child: FutureBuilder<List<FirebaseFile>>(
-              future: futureFiles,
-              builder: (context, snapshot) {
-                switch (snapshot.connectionState) {
-                  case ConnectionState.waiting:
-                    return Center(child: CircularProgressIndicator());
-                  default:
-                    if (snapshot.hasError) {
-                      return Center(child: Text('Some error occurred!'));
-                    } else {
-                      final files = snapshot.data;
-                      random = Random().nextInt(files.length);
-                      count = files.length;
-                      final file = files[random];
-                      return Image.network(file.url);
-                    }
-                }
-              },
-            )),
-          ),
+              height: MediaQuery.of(context).size.height * 0.4,
+              width: MediaQuery.of(context).size.width * 0.7,
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(10),
+                      topRight: Radius.circular(10),
+                      bottomLeft: Radius.circular(10),
+                      bottomRight: Radius.circular(10)),
+                  boxShadow: <BoxShadow>[
+                    BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 5,
+                        blurRadius: 7,
+                        offset: Offset(0, 3))
+                  ]),
+              child: _imageCount()),
+          SizedBox(height: 20),
           GestureDetector(
               onTap: () {
                 setState(() {
-                  random = Random().nextInt(count);
+                  futureFiles = FirebaseApi.listAll(
+                      FirebaseAuth.instance.currentUser.email.toString() +
+                          '/cody/');
+                  _imageCount();
                 });
               },
               child: Icon(Icons.refresh_outlined))
@@ -258,5 +257,37 @@ class _FramePageState extends State<FramePage> {
         ),
       ),
     );
+  }
+
+  Widget _imageCount() {
+    return SizedBox(
+        child: FutureBuilder<List<FirebaseFile>>(
+      future: futureFiles,
+      builder: (context, snapshot) {
+        switch (snapshot.connectionState) {
+          case ConnectionState.waiting:
+            return Center(child: CircularProgressIndicator());
+          default:
+            if (snapshot.hasError) {
+              return Center(child: Text('Some error occurred!'));
+            } else {
+              final files = snapshot.data;
+              if (files.length > 0) {
+                random = Random().nextInt(files.length);
+                count = files.length;
+                file = files[random];
+              } else if (files.length == 0) {
+                random = -1;
+              }
+              print(file);
+              print('랜덤은${files.length}');
+              return random >= 0
+                  ? Image.network(file.url)
+                  : Image.network(
+                      'https://firebasestorage.googleapis.com/v0/b/cloth-9c0a6.appspot.com/o/%EC%88%98%EC%A0%95%EB%90%A8_300px-No_image_available.svg.png?alt=media&token=7672db7f-5e53-4dbe-835b-912c0b43714c');
+            }
+        }
+      },
+    ));
   }
 }
