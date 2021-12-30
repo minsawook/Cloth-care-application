@@ -1,16 +1,35 @@
-# cloth
+# 의상관리어플
 
-A new Flutter project.
+![K-004](https://user-images.githubusercontent.com/92355477/147342642-0245f0f1-1fd3-4f43-909a-bc442632b4ad.png)
+![K-005](https://user-images.githubusercontent.com/92355477/147342735-0a1e1869-7a79-42d5-9078-3003aa462a03.png)
 
-## Getting Started
 
-This project is a starting point for a Flutter application.
+<h2>제작 목적</h2>
+1. 위치에 따른 날씨 정보 확인 가능<br>
+2. 가지고 있는 옷을 애플리케이션을 통해 한 눈에 파악 가능 <br>
+3. 원하는 코디를 저장하여 매일 아침 코디 고민 해결 가능<br>
 
-A few resources to get you started if this is your first Flutter project:
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+<h2>어플 설명</h2>
+1) 의상 관리 보조
+- 가지고 있는 옷을 찍어 개인 옷장에 저장       
+- 개인 옷장을 구성하여 보유한 옷을 한눈에 파악    
+- 카테고리 별로 종류를 나누어 개인 옷장을 구성
+- 가지고 있는 옷을 원하는 스타일로 코디 및 조합     
+2) 의상 분류          
+- 옷장에 등록한 옷에 계절별로 태그 가능    
+- 스타일 별로 태그 가능  
+- 계절, 날씨 등을 고려해 사용자가 미리 정해두었던 코디 추천 
+- 자주 입는 코디는 즐겨찾기 기능을 통해 옷 선정에 대한 사용자의 고민 시간 절약   
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+<h2>적용기술</h2>
+- 플러터를 이용해 하이브리드 어플리케이션 제작 및 기술 적용
+- 안드로이드 스튜디오를 이용해 플러터 기반 프로그래밍 사용  
+- API(Application Programming Interface)를 이용해 자신 주변의 날씨 정보를 가져옴  
+- 파이어 베이스(Firebase)를 이용해 사용자의 옷과 스타일 정보를 데이터베이스에 저장 후 사용자가 삭제, 수정, 추가 등 관리에 사용
+
+<h2>활용방안</h2>
+1) 옷장을 열어 번거롭게 자신의 체형에 옷을 대보는 수고를 하지 않고도 날씨에 맞추어 편리하게 코디 할 수 있는 기능이 생겨 만족도를 높여줌
+2) 사용자가 직접 입어보지 않아도 날씨에 맞추어 편리하게 코디할 수 있는 기능으로 만족도 향상
+3) 가지고 있는 옷의 종류를 쉽게 파악 가능
+4) 외출복을 고르는데 걸리는 시간과 고민 해소
