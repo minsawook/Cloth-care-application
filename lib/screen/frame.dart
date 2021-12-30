@@ -10,10 +10,10 @@ import 'package:http/http.dart';
 import 'package:cloth/weather/my_location.dart';
 
 class FramePage extends StatefulWidget {
-  FramePage({Key key, this.title}) : super(key: key);
+  FramePage({Key key, this.title, this.email}) : super(key: key);
 
   final String title;
-
+  final String email;
   @override
   _FramePageState createState() => _FramePageState();
 }

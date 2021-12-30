@@ -1,9 +1,9 @@
-import 'package:cloth/screen/login.dart';
+import 'package:cloth/screen/sign/login.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
-import 'package:cloth/saved_notifier.dart';
+import 'package:cloth/data/saved_notifier.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

@@ -3,7 +3,7 @@ import 'package:cloth/style/data.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:cloth/saved_notifier.dart';
+import 'package:cloth/data/saved_notifier.dart';
 
 class MoveableStackItem extends StatefulWidget {
   const MoveableStackItem({Key key, this.url, this.data}) : super(key: key);
@@ -34,12 +34,6 @@ class _MoveableStackItemState extends State<MoveableStackItem> {
             setState(() {
               xPosition += tapInfo.delta.dx;
               yPosition += tapInfo.delta.dy;
-              imageUrl = widget.url;
-              //  widget.data.url = imageUrl;
-              //  widget.data.x = xPosition;
-              widget.data.y = yPosition;
-              print(widget.data.y);
-              //  print(yPosition);
             });
           },
           child: Container(
